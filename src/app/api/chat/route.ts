@@ -10,7 +10,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 export async function POST(request: Request) {
   const input = await request.json();
-  const loader = new CSVLoader("src/app/api/chat/2018.csv");
+  const loader = new CSVLoader("public/2018.csv");
   const docs = await loader.load();
   const vectorStore = await MemoryVectorStore.fromDocuments(
     docs,
@@ -18,6 +18,7 @@ export async function POST(request: Request) {
   );
   const model = new OpenAI({
     openAIApiKey: OPENAI_API_KEY,
+    maxTokens: 256,
     // temperature: 0.1,
   });
   const chain = RetrievalQAChain.fromLLM(model, vectorStore.asRetriever());

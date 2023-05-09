@@ -75,7 +75,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="bg-gray-200 shadow-lg  shadow-gray-400  rounded-md p-5 w-[100%] md:w-[60%] xl:w-[60%]  min-h-[80vh] md:min-h-[85vh] lg:min-h-[80vh] max-h-[90vh] md:max-h-[85vh] lg:max-h-[80vh]  flex flex-col justify-between">
+      <div className="mt-4 bg-gray-200 shadow-lg  shadow-gray-400  rounded-md p-5 w-[100%] md:w-[60%] xl:w-[60%]  min-h-[85vh] md:min-h-[85vh] lg:min-h-[80vh] max-h-[90vh] md:max-h-[85vh] lg:max-h-[80vh]  flex flex-col justify-between">
         <div className="overflow-y-scroll">
           {messages.map((msg, i) => (
             <div className=" mt-4" key={i}>
