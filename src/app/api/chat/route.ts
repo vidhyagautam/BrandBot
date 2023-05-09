@@ -12,18 +12,18 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 export async function POST(request: Request) {
   try {
-    const dirRelativeToPublicFolder = "csvs";
-    const dir = path.resolve("./public", dirRelativeToPublicFolder);
-    const filenames = fs.readdirSync(dir);
-    const file = filenames.map((name) =>
-      path.join("./", dirRelativeToPublicFolder, name)
-    )[0];
-    console.log(file);
+    // const dirRelativeToPublicFolder = "csvs";
+    // const dir = path.resolve("./public", dirRelativeToPublicFolder);
+    // const filenames = fs.readdirSync(dir);
+    // const file = filenames.map((name) =>
+    //   path.join("/", dirRelativeToPublicFolder, name)
+    // )[0];
+    // console.log(file);
+
+    // console.log(file);
 
     const input = await request.json();
-    console.log(file);
-
-    const loader = new CSVLoader(file);
+    const loader = new CSVLoader("/csvs/2018.csv");
     const docs = await loader.load();
     const vectorStore = await MemoryVectorStore.fromDocuments(
       docs,
