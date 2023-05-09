@@ -16,8 +16,9 @@ export async function POST(request: Request) {
     const dir = path.resolve("./public", dirRelativeToPublicFolder);
     const filenames = fs.readdirSync(dir);
     const file = filenames.map((name) =>
-      path.join("/", dirRelativeToPublicFolder, name)
+      path.join("./", dirRelativeToPublicFolder, name)
     )[0];
+    console.log(file);
 
     const input = await request.json();
     console.log(file);
