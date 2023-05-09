@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 interface IMessage {
   id?: string;
   message: string;
@@ -13,6 +14,7 @@ interface IMessage {
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState("");
+  const [fileUrl, setFileUrl] = useState("");
   const [messages, setMessages] = useState<IMessage[]>([
     {
       message: "Hey there ! Ask me about the CSV file's data.....",
@@ -26,15 +28,22 @@ export default function Home() {
   ]);
 
   const chat = async (e: React.KeyboardEvent<HTMLDivElement>) => {
+    // toast.error(`Something Went Wrong!..`);
     if (input.length > 3 && e.key === "Enter" && !loading) {
       try {
         setLoading(true);
 
         const res = await fetch("/api/chat/", {
           method: "POST",
-          body: JSON.stringify(input),
+          body: JSON.stringify({
+            input: input,
+            fileUrl: fileUrl,
+          }),
         });
-
+        if (!res.ok) {
+          toast.error(`Something Went Wrong!..${res.statusText}`);
+          return;
+        }
         const data = await res.text();
         const usrMsg: IMessage = {
           message: input,
@@ -49,6 +58,7 @@ export default function Home() {
         setInput("");
       } catch (e) {
         console.log(e);
+        toast.error(`Something Went Wrong!..${e}`);
       } finally {
         setLoading(false);
       }
@@ -57,22 +67,36 @@ export default function Home() {
 
   return (
     <main className="flex bg-gray-100 min-h-screen flex-col items-center justify-between p-6 md:p-24 lg:p-24 overscroll-contain ">
+      <ToastContainer />
       <div className="text-center">
         <h1 className="text-lg font-bold">File Vision</h1>
-        <p className="text-sm text-slate-700">
-          Current File Used Is -{" "}
-          {
-            <span className="underline text-blue-400">
-              <Link
-                href={
-                  "https://www.kaggle.com/datasets/sougatapramanick/happiness-index-2018-2019?resource=download"
-                }
-              >
-                Happiness Index 2018-2019
-              </Link>
-            </span>
-          }
-        </p>
+        {fileUrl ? (
+          <p className="text-sm text-slate-700">
+            Clous Based Custom CSV File Is Used{" "}
+          </p>
+        ) : (
+          <p className="text-sm text-slate-700">
+            Current File Used Is -{" "}
+            {
+              <span className="underline text-blue-400">
+                <Link
+                  href={
+                    "https://www.kaggle.com/datasets/sougatapramanick/happiness-index-2018-2019?resource=download"
+                  }
+                >
+                  Happiness Index 2018-2019
+                </Link>
+              </span>
+            }
+          </p>
+        )}
+        <input
+          type="text"
+          value={fileUrl}
+          onChange={(e) => setFileUrl(e.target.value)}
+          className={`w-full bg-gray-200 p-3 block mt-2 rounded-md focus:outline-none text-slate-900  text-sm `}
+          placeholder="Paste CSV Public Acess URL"
+        />
       </div>
 
       <div className="mt-4 bg-gray-200 shadow-lg  shadow-gray-400  rounded-md p-5 w-[100%] md:w-[60%] xl:w-[60%]  min-h-[85vh] md:min-h-[85vh] lg:min-h-[80vh] max-h-[90vh] md:max-h-[85vh] lg:max-h-[80vh]  flex flex-col justify-between">

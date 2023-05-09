@@ -7,23 +7,27 @@ import { OpenAI } from "langchain/llms/openai";
 import { RetrievalQAChain } from "langchain/chains";
 import fs from "fs";
 import path from "path";
+import { headers } from "next/dist/client/components/headers";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const DEFAULT_CSV_URL =
+  "https://firebasestorage.googleapis.com/v0/b/filevision-ai.appspot.com/o/2018.csv?alt=media&token=33121156-d2a1-4e0a-80bf-f3cfd633fb95";
 
 export async function POST(request: Request) {
   try {
-    // const dirRelativeToPublicFolder = "csvs";
-    // const dir = path.resolve("./public", dirRelativeToPublicFolder);
-    // const filenames = fs.readdirSync(dir);
-    // const file = filenames.map((name) =>
-    //   path.join("/", dirRelativeToPublicFolder, name)
-    // )[0];
-    // console.log(file);
+    const params = await request.json();
+    const input = params.input;
+    const fileUrl = params.fileUrl;
 
-    // console.log(file);
+    const URL = fileUrl ? fileUrl : DEFAULT_CSV_URL;
+    const response = await fetch(URL);
 
-    const input = await request.json();
-    const loader = new CSVLoader("/csvs/2018.csv");
+    if (!response.ok) {
+      return Response.error();
+    }
+
+    const blob = await response.blob();
+    const loader = new CSVLoader(blob);
     const docs = await loader.load();
     const vectorStore = await MemoryVectorStore.fromDocuments(
       docs,
