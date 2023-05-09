@@ -5,14 +5,24 @@ import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { OpenAI } from "langchain/llms/openai";
 
 import { RetrievalQAChain } from "langchain/chains";
-import { json } from "stream/consumers";
+import fs from "fs";
+import path from "path";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 export async function POST(request: Request) {
   try {
+    const dirRelativeToPublicFolder = "csvs";
+    const dir = path.resolve("./public", dirRelativeToPublicFolder);
+    const filenames = fs.readdirSync(dir);
+    const file = filenames.map((name) =>
+      path.join("/", dirRelativeToPublicFolder, name)
+    )[0];
+
     const input = await request.json();
-    const loader = new CSVLoader("public/2018.csv");
+    console.log(file);
+
+    const loader = new CSVLoader(file);
     const docs = await loader.load();
     const vectorStore = await MemoryVectorStore.fromDocuments(
       docs,
