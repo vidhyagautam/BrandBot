@@ -9,9 +9,7 @@ import { RetrievalQAChain } from "langchain/chains";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-export const config = {
-  runtime: "edge",
-};
+export const runtime = "edge";
 
 export async function POST(request: Request) {
   try {
