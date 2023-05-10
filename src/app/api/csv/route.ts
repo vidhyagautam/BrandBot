@@ -8,8 +8,10 @@ import { OpenAI } from "langchain/llms/openai";
 import { RetrievalQAChain } from "langchain/chains";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const DEFAULT_CSV_URL =
-  "https://firebasestorage.googleapis.com/v0/b/filevision-ai.appspot.com/o/2018.csv?alt=media&token=33121156-d2a1-4e0a-80bf-f3cfd633fb95";
+
+export const config = {
+  runtime: "edge",
+};
 
 export async function POST(request: Request) {
   try {
@@ -27,7 +29,7 @@ export async function POST(request: Request) {
     const csvBlob = await response.blob();
     const csvLoader = new CSVLoader(csvBlob);
     const csvData = await csvLoader.load();
-    console.log(csvData);
+    // console.log(csvData);
 
     //Now Load the Doc File Sent From Front End
     const docLoader = new DocxLoader(doc!);
