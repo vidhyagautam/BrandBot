@@ -119,7 +119,7 @@ const CSVCreator: NextPage<Props> = () => {
     return csvRows.join("\n");
   };
   return (
-    <div className="w-[100%] md:w-[60%] xl:w-[60%]  border border-slate-300 rounded-md p-4 mt-4">
+    <div className=" w-full border border-slate-300 rounded-md p-4 mt-4">
       {loading ? (
         <p>Fetching templates...</p>
       ) : (
