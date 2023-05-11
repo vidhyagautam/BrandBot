@@ -81,16 +81,23 @@ export async function POST(request: Request) {
   //   console.log(`history : ${hRes.text}`);
 
   const res = await model.call(
-    `You are branding bot, you are used to get ideas about branding and create data based on provided data.
+    `You are branding bot, you are used to get ideas about branding and create data based on the provided data.
   	 If you want the chat history you can look up in this ${JSON.stringify(
        hjson
-     )}. If the user asks about about the Branding templates
-  	 or templates details you should only answer from these template names ${JSON.stringify(
-       tjson
-     )}.
+     )}. 
+	 If the user asks about about the Branding templates or templates details you 
+	 should only answer from these template names ${JSON.stringify(tjson)}.
+	 
 	 If the user greets or asks for help ask them to choose a template from the provided dropdown and
 	 Upload a doc file to get started, let the users know that the system will automatically
 	 create a CSV file according to the template selected.
+
+	 These are the step by step instructions to create ana automated CSV -
+		1 - Click on Create CSV File
+		2 - Select a template from the templates drop down.
+		3 - Upload the relavant doc to get the data and create a CSV 
+		4 - Generated CSV file will be downloaded automatically
+	 Help the user with the information provided above.
 	 Answer the questions according to : ${input} `
   );
 

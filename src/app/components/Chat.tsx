@@ -97,7 +97,7 @@ const Chat: NextPage<Props> = () => {
   return (
     <div className="min-w-full">
       <ToastContainer />
-      {tloading ? (
+      {/* {tloading ? (
         <p>Fetching templates...</p>
       ) : (
         <div className="flex flex-col space-y-2">
@@ -119,7 +119,7 @@ const Chat: NextPage<Props> = () => {
             ))}
           </select>
         </div>
-      )}
+      )} */}
       <div className="mt-4 bg-gray-200 shadow-lg  shadow-gray-400  rounded-md p-5 w-[100%]   min-h-[85vh] md:min-h-[85vh] lg:min-h-[80vh] max-h-[90vh] md:max-h-[85vh] lg:max-h-[80vh]  flex flex-col justify-between">
         <div className="overflow-y-scroll">
           {messages.map((msg, i) => (
