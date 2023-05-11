@@ -131,6 +131,10 @@ const CSVCreator: NextPage<Props> = () => {
             className="p-2 bg-slate-200 rounded-md"
             onChange={(e) => setSelectedTemplate(e.target.value)}
           >
+            <option disabled selected>
+              {" "}
+              --Select a CSV Template --{" "}
+            </option>
             {templates.map((temp, i) => (
               <option key={i} value={temp.fileStorage.downloadUrl}>
                 {temp.templateName}

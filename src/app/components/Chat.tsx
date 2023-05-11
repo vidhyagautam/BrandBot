@@ -1,9 +1,12 @@
+import { firestore } from "@/lib/firebase";
+import { collection, onSnapshot } from "firebase/firestore";
 import { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { IStoredFile } from "./uploadFile";
 interface Props {}
 
 interface IMessage {
@@ -13,6 +16,7 @@ interface IMessage {
 }
 
 const Chat: NextPage<Props> = () => {
+  const db = firestore;
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState("");
   const [fileUrl, setFileUrl] = useState("");
@@ -22,6 +26,10 @@ const Chat: NextPage<Props> = () => {
       isUserMessage: false,
     },
   ]);
+
+  const [templates, setTemplates] = useState<IStoredFile[]>([]);
+  const [tloading, setTLoading] = useState<boolean>(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("");
 
   const chat = async (e: React.KeyboardEvent<HTMLDivElement>) => {
     // toast.error(`Something Went Wrong!..`);
@@ -33,7 +41,7 @@ const Chat: NextPage<Props> = () => {
           method: "POST",
           body: JSON.stringify({
             input: input,
-            fileUrl: fileUrl,
+            fileUrl: selectedTemplate,
           }),
         });
         if (!res.ok) {
@@ -61,10 +69,56 @@ const Chat: NextPage<Props> = () => {
     }
   };
 
+  const fethcData = () => {
+    setTLoading(true);
+    const col = collection(db, "CSVFiles");
+
+    const unsub = onSnapshot(
+      col,
+      (snapshot) => {
+        const templates = snapshot.docs.map((doc) => {
+          return { ...doc.data(), id: doc.id } as IStoredFile;
+        });
+        setTemplates(templates);
+        setTLoading(false);
+      },
+      (error) => {
+        setTLoading(false);
+        console.log(error);
+      }
+    );
+  };
+
+  useEffect(() => {
+    fethcData();
+  }, []);
+
   return (
     <div className="min-w-full">
       <ToastContainer />
-
+      {tloading ? (
+        <p>Fetching templates...</p>
+      ) : (
+        <div className="flex flex-col space-y-2">
+          <label>Select a CSV</label>
+          <select
+            name="templates"
+            id="temps"
+            className="p-2 bg-slate-200 rounded-md"
+            onChange={(e) => setSelectedTemplate(e.target.value)}
+          >
+            <option disabled selected>
+              {" "}
+              --Select a CSV --{" "}
+            </option>
+            {templates.map((temp, i) => (
+              <option key={i} value={temp.fileStorage.downloadUrl}>
+                {temp.templateName}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
       <div className="mt-4 bg-gray-200 shadow-lg  shadow-gray-400  rounded-md p-5 w-[100%]   min-h-[85vh] md:min-h-[85vh] lg:min-h-[80vh] max-h-[90vh] md:max-h-[85vh] lg:max-h-[80vh]  flex flex-col justify-between">
         <div className="overflow-y-scroll">
           {messages.map((msg, i) => (
