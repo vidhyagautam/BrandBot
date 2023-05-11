@@ -9,8 +9,6 @@ import { RetrievalQAChain } from "langchain/chains";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-export const runtime = "edge";
-
 export async function POST(request: Request) {
   try {
     //Get the input data passed as Formdata

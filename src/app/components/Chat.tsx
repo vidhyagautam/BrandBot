@@ -1,8 +1,7 @@
 import { firestore } from "@/lib/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import { NextPage } from "next";
-import Image from "next/image";
-import Link from "next/link";
+
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,7 +21,7 @@ const Chat: NextPage<Props> = () => {
   const [fileUrl, setFileUrl] = useState("");
   const [messages, setMessages] = useState<IMessage[]>([
     {
-      message: "Hey there ! Ask me about the CSV file's data.....",
+      message: "Hey there ! How can I help you ?",
       isUserMessage: false,
     },
   ]);
@@ -37,11 +36,13 @@ const Chat: NextPage<Props> = () => {
       try {
         setLoading(true);
 
-        const res = await fetch("/api/chat/", {
+        const res = await fetch("/api/newchat/", {
           method: "POST",
           body: JSON.stringify({
             input: input,
-            fileUrl: selectedTemplate,
+            chatHistory: messages,
+            templateUrl: selectedTemplate,
+            templates: templates,
           }),
         });
         if (!res.ok) {

@@ -3,7 +3,8 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { IStoredFile } from "./uploadFile";
-import * as Select from "@radix-ui/react-select";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Cross2Icon, UploadIcon } from "@radix-ui/react-icons";
 
 interface Props {}
@@ -57,16 +58,12 @@ const CSVCreator: NextPage<Props> = () => {
           body: formData,
         });
         const data = await res.json();
-        // const csv =
-        //   `${data.columns}\n` + `${Object.values(data.data).join(",")}`;
-        // console.log(csv);
         const csv = csvmaker(data.data);
         download(csv);
-        // const blob = new Blob([csv], { type: "text/csv" });
-        // setCreatedCSV(blob);
         console.log(data);
       } catch (e) {
         console.log(e);
+        toast.error(`Oops ! Something Went Wrong: ${e}`);
       } finally {
         setProcessing(false);
       }
@@ -120,6 +117,7 @@ const CSVCreator: NextPage<Props> = () => {
   };
   return (
     <div className=" w-full border border-slate-300 rounded-md p-4 mt-4">
+      <ToastContainer />
       {loading ? (
         <p>Fetching templates...</p>
       ) : (

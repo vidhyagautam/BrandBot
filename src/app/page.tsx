@@ -43,7 +43,7 @@ export default function Home() {
         </div>
       </div>
 
-      <Tabs.Root
+      {/* <Tabs.Root
         className="flex flex-col w-[100%] md:w-[60%] xl:w-[60%]  mt-4 "
         defaultValue="tab1"
       >
@@ -76,7 +76,10 @@ export default function Home() {
         >
           <Chat />
         </Tabs.Content>
-      </Tabs.Root>
+      </Tabs.Root> */}
+
+      <Chat />
+      {/* <CSVCreator /> */}
     </main>
   );
 }
