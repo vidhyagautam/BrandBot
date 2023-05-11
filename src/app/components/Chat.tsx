@@ -21,7 +21,7 @@ const Chat: NextPage<Props> = () => {
   const [fileUrl, setFileUrl] = useState("");
   const [messages, setMessages] = useState<IMessage[]>([
     {
-      message: "Hey there ! How can I help you ?",
+      message: "Hey there ! How may I help you ?",
       isUserMessage: false,
     },
   ]);
